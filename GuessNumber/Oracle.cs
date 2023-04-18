@@ -25,53 +25,108 @@ public class Oracle
         AnsiConsole.MarkupLineInterpolated(
             $"[red]Can you guest the number from {_settings!.DownEdge} to {_settings.UpEdge}?[/]");
     }
-    public bool Prediction()
+    
+    public bool Guessed()
     {
-        const bool endGame = false;
-        
         AnsiConsole.Markup("Please type your number: ");
         
         if (!int.TryParse(Console.ReadLine(), out var number))
         {
-            AnsiConsole.MarkupLine("You need write the number! [#ffba33]Try again.[/]");
-            return !endGame;
+            CanNotParse();
+            return false;
         }
+
+        // switch (number)
+        // {
+        //     case var _ when number == _victoryNumber:
+        //         return IsGameOver();
+        //     case var _ when number > _victoryNumber:
+        //         IsBigger();
+        //         return false;
+        //     case var _ when number < _victoryNumber:
+        //         IsSmaller();
+        //         return false;
+        //     default:
+        //         NotInRange();
+        //         return false;
+        // }
 
         if (number > _settings!.UpEdge || number < _settings.DownEdge)
         {
-            AnsiConsole.MarkupLine(
-                $"Please type number from {_settings.DownEdge} to {_settings.UpEdge}. [#ffba33]Try again.[/]");
-            return !endGame;
+            NotInRange();
+            return false;
         }
 
         if (number == _victoryNumber)
         {
-            AnsiConsole.MarkupLine("[#c833ff]You win!!![/]");
-            
-            var selected = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("Do you want [red]play[/] again?")
-                    .PageSize(10)
-                    .AddChoices("YES", "NO"));
-
-            if (selected == "NO")
-            {
-                AnsiConsole.MarkupLine("[bold red]GAME OVER![/]");
-                return endGame;
-            }
-            
-            _victoryNumber = new Random().Next(_settings!.DownEdge, _settings.UpEdge + 1);
-            AnsiConsole.MarkupLine("[#33ff62]Welcome to new game![/]");
-            return !endGame;
+            return IsGameOver();
         }
 
         if (number > _victoryNumber)
         {
-            AnsiConsole.MarkupLine("Your number is [bold blue]bigger[/]. Try again.");
-            return !endGame;
+            IsBigger();
+            return false;
         }
 
+        IsSmaller();
+        return false;
+    }
+
+    private static void IsSmaller()
+    {
         AnsiConsole.MarkupLine("Your number is [bold green]smaller[/]. Try again.");
-        return !endGame;
+    }
+
+    private static void IsBigger()
+    {
+        AnsiConsole.MarkupLine("Your number is [bold blue]bigger[/]. Try again.");
+    }
+
+    private bool NewGame()
+    {
+        _victoryNumber = new Random().Next(_settings!.DownEdge, _settings.UpEdge + 1);
+        AnsiConsole.MarkupLine("[#33ff62]Welcome to new game![/]");
+        return false;
+    }
+
+    private static string Choice()
+    {
+        var selected = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Do you want [red]play[/] again?")
+                .PageSize(10)
+                .AddChoices("YES", "NO"));
+        return selected;
+    }
+
+    private static void YouWin()
+    {
+        AnsiConsole.MarkupLine("[#c833ff]You win!!![/]");
+    }
+
+    private void NotInRange()
+    {
+        AnsiConsole.MarkupLine(
+            $"Please type number from {_settings!.DownEdge} to {_settings.UpEdge}. [#ffba33]Try again.[/]");
+    }
+
+    private static void CanNotParse()
+    {
+        AnsiConsole.MarkupLine("You need write the number! [#ffba33]Try again.[/]");
+    }
+
+    private bool IsGameOver()
+    {
+        YouWin();
+            
+        var selected = Choice();
+
+        return selected == "NO" ? GameOver() : NewGame();
+    }
+
+    private static bool GameOver()
+    {
+        AnsiConsole.MarkupLine("[bold red]GAME OVER![/]");
+        return true;
     }
 }

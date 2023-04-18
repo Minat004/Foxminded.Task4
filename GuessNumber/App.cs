@@ -19,7 +19,7 @@ public class App
         
         oracle.Header();
 
-        while (oracle.Prediction()){}
+        while (!oracle.Guessed()){}
 
         return Task.CompletedTask;
     }
