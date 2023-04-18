@@ -36,21 +36,6 @@ public class Oracle
             return false;
         }
 
-        // switch (number)
-        // {
-        //     case var _ when number == _victoryNumber:
-        //         return IsGameOver();
-        //     case var _ when number > _victoryNumber:
-        //         IsBigger();
-        //         return false;
-        //     case var _ when number < _victoryNumber:
-        //         IsSmaller();
-        //         return false;
-        //     default:
-        //         NotInRange();
-        //         return false;
-        // }
-
         if (number > _settings!.UpEdge || number < _settings.DownEdge)
         {
             NotInRange();
