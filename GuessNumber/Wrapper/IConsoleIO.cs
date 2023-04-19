@@ -17,4 +17,6 @@ public interface IConsoleIO
     public void Write(string value);
     
     public string Prompt(IPrompt<string> value);
+    
+    public string Prompt();
 }

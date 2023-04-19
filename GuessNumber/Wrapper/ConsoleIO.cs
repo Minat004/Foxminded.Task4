@@ -39,4 +39,14 @@ public class ConsoleIO : IConsoleIO
     {
         return AnsiConsole.Prompt(value);
     }
+
+    public string Prompt()
+    {
+        var select = new SelectionPrompt<string>()
+            .Title("Do you want [red]play[/] again?")
+            .PageSize(10)
+            .AddChoices("YES", "NO");
+        
+        return AnsiConsole.Prompt(select);
+    }
 }

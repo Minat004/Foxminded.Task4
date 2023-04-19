@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessNumber", "GuessNumber\GuessNumber.csproj", "{B5FD6E1A-EB9B-4914-A17B-05812CF05CF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessNumber.Tests", "GuessNumber.Tests\GuessNumber.Tests.csproj", "{1672A437-82F4-4357-BD96-16C165E46B70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{B5FD6E1A-EB9B-4914-A17B-05812CF05CF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5FD6E1A-EB9B-4914-A17B-05812CF05CF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5FD6E1A-EB9B-4914-A17B-05812CF05CF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1672A437-82F4-4357-BD96-16C165E46B70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1672A437-82F4-4357-BD96-16C165E46B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1672A437-82F4-4357-BD96-16C165E46B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1672A437-82F4-4357-BD96-16C165E46B70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

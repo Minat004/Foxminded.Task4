@@ -99,12 +99,7 @@ public class Oracle
 
     private string Choice()
     {
-        var selected = _console.Prompt(
-            new SelectionPrompt<string>()
-                .Title("Do you want [red]play[/] again?")
-                .PageSize(10)
-                .AddChoices("YES", "NO"));
-        return selected;
+        return _console.Prompt();
     }
 
     private bool GameOver()
