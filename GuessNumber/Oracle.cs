@@ -1,4 +1,5 @@
 ﻿using GuessNumber.Settings;
+using GuessNumber.Wrapper;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 
@@ -7,30 +8,34 @@ namespace GuessNumber;
 public class Oracle
 {
     private readonly AppSettingsModel? _settings;
+    private readonly IConsoleIO _console;
+    private readonly IRandomizer _random;
     private int _victoryNumber;
 
-    public Oracle(IConfiguration configuration)
+    public Oracle(IConfiguration configuration, IConsoleIO console, IRandomizer random)
     {
+        _console = console;
+        _random = random;
         _settings = configuration.GetRequiredSection("AppSettings").Get<AppSettingsModel>();
-        _victoryNumber = new Random().Next(_settings!.DownEdge, _settings.UpEdge + 1);
+        _victoryNumber = _random.RandomInRange(_settings!.DownEdge, _settings.UpEdge + 1);
     }
 
-    public void Header()
+    public void StartHeader()
     {
-        AnsiConsole.Write(
+        _console.Write(
             new FigletText("Guess Number")
                 .LeftJustified()
                 .Color(Color.Red));
 
-        AnsiConsole.MarkupLineInterpolated(
+        _console.WriteLine(
             $"[red]Can you guest the number from {_settings!.DownEdge} to {_settings.UpEdge}?[/]");
     }
     
     public bool Guessed()
     {
-        AnsiConsole.Markup("Please type your number: ");
+        _console.Write("Please type your number: ");
         
-        if (!int.TryParse(Console.ReadLine(), out var number))
+        if (!int.TryParse(_console.ReadLine(), out var number))
         {
             CanNotParse();
             return false;
@@ -57,47 +62,25 @@ public class Oracle
         return false;
     }
 
-    private static void IsSmaller()
+    private void IsSmaller()
     {
-        AnsiConsole.MarkupLine("Your number is [bold green]smaller[/]. Try again.");
+        _console.WriteLine("Your number is [bold green]smaller[/]. Try again.");
     }
 
-    private static void IsBigger()
+    private void IsBigger()
     {
-        AnsiConsole.MarkupLine("Your number is [bold blue]bigger[/]. Try again.");
-    }
-
-    private bool NewGame()
-    {
-        _victoryNumber = new Random().Next(_settings!.DownEdge, _settings.UpEdge + 1);
-        AnsiConsole.MarkupLine("[#33ff62]Welcome to new game![/]");
-        return false;
-    }
-
-    private static string Choice()
-    {
-        var selected = AnsiConsole.Prompt(
-            new SelectionPrompt<string>()
-                .Title("Do you want [red]play[/] again?")
-                .PageSize(10)
-                .AddChoices("YES", "NO"));
-        return selected;
-    }
-
-    private static void YouWin()
-    {
-        AnsiConsole.MarkupLine("[#c833ff]You win!!![/]");
+        _console.WriteLine("Your number is [bold blue]bigger[/]. Try again.");
     }
 
     private void NotInRange()
     {
-        AnsiConsole.MarkupLine(
+        _console.WriteLine(
             $"Please type number from {_settings!.DownEdge} to {_settings.UpEdge}. [#ffba33]Try again.[/]");
     }
 
-    private static void CanNotParse()
+    private void CanNotParse()
     {
-        AnsiConsole.MarkupLine("You need write the number! [#ffba33]Try again.[/]");
+        _console.WriteLine("You need write the number! [#ffba33]Try again.[/]");
     }
 
     private bool IsGameOver()
@@ -109,9 +92,31 @@ public class Oracle
         return selected == "NO" ? GameOver() : NewGame();
     }
 
-    private static bool GameOver()
+    private void YouWin()
     {
-        AnsiConsole.MarkupLine("[bold red]GAME OVER![/]");
+        _console.WriteLine("[#c833ff]You win!!![/]");
+    }
+
+    private string Choice()
+    {
+        var selected = _console.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Do you want [red]play[/] again?")
+                .PageSize(10)
+                .AddChoices("YES", "NO"));
+        return selected;
+    }
+
+    private bool GameOver()
+    {
+        _console.WriteLine("[bold red]GAME OVER![/]");
         return true;
+    }
+
+    private bool NewGame()
+    {
+        _victoryNumber = _random.RandomInRange(_settings!.DownEdge, _settings.UpEdge + 1);
+        _console.WriteLine("[#33ff62]Welcome to new game![/]");
+        return false;
     }
 }

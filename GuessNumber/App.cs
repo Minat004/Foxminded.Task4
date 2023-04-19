@@ -1,23 +1,26 @@
-﻿using GuessNumber.Settings;
+﻿using GuessNumber.Wrapper;
 using Microsoft.Extensions.Configuration;
-using Spectre.Console;
 
 namespace GuessNumber;
 
 public class App
 {
     private readonly IConfiguration _configuration;
+    private readonly IConsoleIO _console;
+    private readonly IRandomizer _random;
 
-    public App(IConfiguration configuration)
+    public App(IConfiguration configuration, IConsoleIO console, IRandomizer random)
     {
         _configuration = configuration;
+        _console = console;
+        _random = random;
     }
 
     public Task RunAsync()
     {
-        var oracle = new Oracle(_configuration);
+        var oracle = new Oracle(_configuration, _console, _random);
         
-        oracle.Header();
+        oracle.StartHeader();
 
         while (!oracle.Guessed()){}
 

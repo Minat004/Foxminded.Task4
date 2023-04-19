@@ -1,4 +1,5 @@
 ﻿using GuessNumber;
+using GuessNumber.Wrapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +14,8 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddTransient<App>();
+        services.AddSingleton<IConsoleIO, ConsoleIO>();
+        services.AddSingleton<IRandomizer, Randomizer>();
     })
     .Build();
 
